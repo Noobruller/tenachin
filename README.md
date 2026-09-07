@@ -22,38 +22,41 @@ Rebuilt from a monolithic prototype into a modular, production-grade **Next.js 1
 
 ```
 tenachin/
-├── .gitignore
-├── README.md
-└── tenachin-next/                # Next.js 14 + TypeScript application
-    ├── app/                      # Next.js App Router
-    │   ├── globals.css           # Design tokens & base styles
-    │   ├── layout.tsx            # Root layout with DM Sans next/font
-    │   └── page.tsx              # Application entry point
-    ├── components/               # Layered modular React components
-    │   ├── auth/                 # Sign In / Sign Up screens
-    │   ├── coach/                # AI Coach chat interface
-    │   ├── food/                 # Ethiopian food logger & macro tracker
-    │   ├── home/                 # Dashboard, summary cards & progress rings
-    │   ├── layout/               # Header, BottomNav navigation
-    │   ├── onboarding/           # Onboarding flow & goal setting
-    │   ├── premium/              # Subscription plans & payment checkout
-    │   ├── tracker/              # Motion sensor workouts & activity tracker
-    │   ├── ui/                   # Shared UI primitives (NInput, Modals)
-    │   └── AppShell.tsx          # Root state management & screen router
-    ├── hooks/                    # Reusable React hooks
-    │   ├── useChat.ts            # AI coach message state & streaming
-    │   ├── useLocalStorage.ts    # SSR-safe persistent storage
-    │   ├── useMotionSensor.ts    # Device accelerometer / step detection
-    │   ├── useProfile.ts         # User profile, goals, and settings
-    │   └── useTracker.ts         # Activity & workout session manager
-    ├── lib/                      # Core business logic & data
-    │   ├── foods.ts              # Ethiopian food database & nutritional facts
-    │   ├── i18n.ts               # English & Amharic translations
-    │   ├── openrouter.ts         # OpenRouter AI API client
-    │   ├── plans.ts              # Workout routines & subscription tiers
-    │   └── tokens.ts             # Theme tokens & color palette
-    └── types/
-        └── index.ts              # TypeScript type definitions & interfaces
+├── app/                          # Next.js App Router
+│   ├── globals.css               # Design tokens & base styles
+│   ├── layout.tsx                # Root layout with DM Sans next/font
+│   └── page.tsx                  # Application entry point
+├── components/                   # Layered modular React components
+│   ├── auth/                     # Sign In / Sign Up screens
+│   ├── coach/                    # AI Coach chat interface
+│   ├── food/                     # Ethiopian food logger & macro tracker
+│   ├── home/                     # Dashboard, summary cards & progress rings
+│   ├── layout/                   # Header, BottomNav navigation
+│   ├── onboarding/               # Onboarding flow & goal setting
+│   ├── premium/                  # Subscription plans & payment checkout
+│   ├── tracker/                  # Motion sensor workouts & activity tracker
+│   ├── ui/                       # Shared UI primitives (NInput, Modals)
+│   └── AppShell.tsx              # Root state management & screen router
+├── hooks/                        # Reusable React hooks
+│   ├── useChat.ts                # AI coach message state & streaming
+│   ├── useLocalStorage.ts        # SSR-safe persistent storage
+│   ├── useMotionSensor.ts        # Device accelerometer / step detection
+│   ├── useProfile.ts             # User profile, goals, and settings
+│   └── useTracker.ts             # Activity & workout session manager
+├── lib/                          # Core business logic & data
+│   ├── foods.ts                  # Ethiopian food database & nutritional facts
+│   ├── i18n.ts                   # English & Amharic translations
+│   ├── openrouter.ts             # OpenRouter AI API client
+│   ├── plans.ts                  # Workout routines & subscription tiers
+│   └── tokens.ts                 # Theme tokens & color palette
+├── types/
+│   └── index.ts                  # TypeScript type definitions & interfaces
+├── .env.example                  # Environment configuration template
+├── .gitignore                    # Git ignore specifications
+├── next.config.mjs               # Next.js build config
+├── package.json                  # Dependencies and scripts
+├── README.md                     # Documentation
+└── tsconfig.json                 # TypeScript compiler options
 ```
 
 ---
@@ -66,18 +69,13 @@ tenachin/
 
 ### Installation
 
-1. Navigate to the `tenachin-next` directory:
-   ```bash
-   cd tenachin-next
-   ```
-
-2. Install dependencies:
+1. Clone repository and install dependencies:
    ```bash
    npm install
    ```
 
-3. Configure environment variables (optional for AI Coach):
-   Create `.env.local` inside `tenachin-next/`:
+2. Configure environment variables (optional for AI Coach):
+   Create `.env.local` in root:
    ```env
    NEXT_PUBLIC_OR_KEY=your_openrouter_api_key_here
    ```
