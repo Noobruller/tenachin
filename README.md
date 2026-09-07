@@ -9,12 +9,12 @@ Rebuilt from a monolithic prototype into a modular, production-grade **Next.js 1
 -- Key Features
 
 - **🇪🇹 Ethiopian Nutritional Intelligence**: Comprehensive food database with traditional staples (Injera, Shiro, Doro Wat, Misir Wat, Kik Alicha, Atkilt, etc.), localized macro breakdowns, and calorie tracking.
--  Bilingual Localization**: Native toggle between **English** and **አማርኛ (Amharic)** across all UI elements, guidance messages, and health metrics.
--  AI Health & Fitness Coach**: Integrated conversational coach powered by OpenRouter LLM API, providing contextual fitness advice, meal plans, and encouragement.
--  Device Motion Sensors**: Real-time step counting, workout intensity detection, and motion telemetry via DeviceMotionEvent/DeviceOrientation API.
--  Interactive Progress & Biometrics**: Visual progress rings for calories, protein, hydration, and steps, alongside BMI and macro calculators.
--  Premium & Subscription Tiers**: Tiered plans (Free, Pro, Elite) with local Ethiopian payment integration support (Telebirr, CBE Birr, Chapa).
--  Glassmorphic Modern UI**: Dynamic dark & light themes, modern typography (DM Sans via `next/font`), smooth micro-animations, and responsive mobile-first shell.
+-  Bilingual Localization: Native toggle between **English** and **አማርኛ (Amharic)** across all UI elements, guidance messages, and health metrics.
+-  AI Health & Fitness Coach: Integrated conversational coach powered by OpenRouter LLM API, providing contextual fitness advice, meal plans, and encouragement.
+-  Device Motion Sensors: Real-time step counting, workout intensity detection, and motion telemetry via DeviceMotionEvent/DeviceOrientation API.
+-  Interactive Progress & Biometrics: Visual progress rings for calories, protein, hydration, and steps, alongside BMI and macro calculators.
+-  Premium & Subscription Tiers: Tiered plans (Free, Pro, Elite) with local Ethiopian payment integration support (Telebirr, CBE Birr, Chapa).
+-  Glassmorphic Modern UI: Dynamic dark & light themes, modern typography (DM Sans via `next/font`), smooth micro-animations, and responsive mobile-first shell.
 
 ---
 
