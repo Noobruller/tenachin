@@ -17,8 +17,8 @@ import OnboardingScreen    from "@/components/onboarding/OnboardingScreen";
 import HomeScreen          from "@/components/home/HomeScreen";
 import TrackerScreen       from "@/components/tracker/TrackerScreen";
 import FoodScreen          from "@/components/food/FoodScreen";
+import WorkoutScreen       from "@/components/workout/WorkoutScreen";
 import CoachScreen         from "@/components/coach/CoachScreen";
-import PremiumScreen       from "@/components/premium/PremiumScreen";
 import EditProfileModal    from "@/components/ui/EditProfileModal";
 
 const NAV_HEIGHT = 64;
@@ -38,8 +38,16 @@ export default function AppShell() {
   const toggleTheme = () => setThemePersist(isDark ? "light" : "dark");
 
   // ── Navigation state ───────────────────────────────────────────────────────
-  const [screen,         setScreen]         = useState<Screen>("login");
-  const [tab,            setTab]            = useState<Tab>("onboarding");
+  const [screen,         setScreen]         = useState<Screen>(() => {
+    const session = lsGet<{ loggedIn: boolean } | null>("tn_session", null);
+    return session?.loggedIn ? "app" : "login";
+  });
+  const [tab,            setTab]            = useState<Tab>(() => {
+    const session = lsGet<{ loggedIn: boolean } | null>("tn_session", null);
+    const onboarded = lsGet<boolean>("tn_onboarded", false);
+    if (!session?.loggedIn) return "onboarding";
+    return onboarded ? "home" : "onboarding";
+  });
   const [editingProfile, setEditingProfile] = useState(false);
 
   // ── Custom hooks ───────────────────────────────────────────────────────────
@@ -61,15 +69,23 @@ export default function AppShell() {
   const chat = useChat({ profile, bmi, bmiCat, lang });
 
   // ── Auth handlers ──────────────────────────────────────────────────────────
-  const handleAuthSuccess = useCallback((partial: Partial<Profile>) => {
+  const handleAuthSuccess = useCallback((partial: Partial<Profile>, isSignup = false) => {
     if (Object.keys(partial).length > 0) {
       setProfile((p) => ({ ...p, ...partial }));
     }
+    lsSet("tn_session", { loggedIn: true });
     setScreen("app");
-    setTab("onboarding");
+    if (isSignup) {
+      lsSet("tn_onboarded", false);
+      setTab("onboarding");
+    } else {
+      const onboarded = lsGet<boolean>("tn_onboarded", false);
+      setTab(onboarded ? "home" : "onboarding");
+    }
   }, [setProfile]);
 
   const handleSignOut = useCallback(() => {
+    lsSet("tn_session", { loggedIn: false });
     setScreen("login");
     setTab("onboarding");
     setEditingProfile(false);
@@ -141,6 +157,7 @@ export default function AppShell() {
 
   // ── Main app ───────────────────────────────────────────────────────────────
   const isCoach = tab === "coach";
+  const isOnboarding = tab === "onboarding";
 
   const contentStyle: React.CSSProperties = isCoach
     ? {
@@ -151,7 +168,7 @@ export default function AppShell() {
         display: "flex", flexDirection: "column",
         overflow: "hidden", background: C.bg,
       }
-    : { paddingBottom: NAV_HEIGHT + 16 };
+    : { paddingBottom: isOnboarding ? 24 : NAV_HEIGHT + 16 };
 
   return (
     <>
@@ -177,12 +194,16 @@ export default function AppShell() {
           <div>
             <Header C={C} lang={lang} theme={theme}
               onToggleLang={toggleLang} onToggleTheme={toggleTheme}
-              onEditProfile={() => setEditingProfile(true)} />
+              onEditProfile={() => setEditingProfile(true)}
+              hideProfileBtn={isOnboarding} />
             <div style={contentStyle}>
               {tab === "onboarding" && (
                 <OnboardingScreen
                   profile={profile} setPF={setPF} toggleCond={toggleCond}
-                  onComplete={() => setTab("home")}
+                  onComplete={() => {
+                    lsSet("tn_onboarded", true);
+                    setTab("home");
+                  }}
                   C={C} lang={lang}
                 />
               )}
@@ -219,14 +240,18 @@ export default function AppShell() {
                   profile={profile} lang={lang} C={C}
                 />
               )}
-              {tab === "premium" && (
-                <PremiumScreen C={C} lang={lang} />
+              {tab === "workout" && (
+                <WorkoutScreen
+                  profile={profile} C={C} lang={lang}
+                />
               )}
             </div>
           </div>
         )}
 
-        <BottomNav tab={tab} setTab={setTab} C={C} lang={lang} />
+        {!isOnboarding && (
+          <BottomNav tab={tab} setTab={setTab} C={C} lang={lang} />
+        )}
       </div>
     </>
   );

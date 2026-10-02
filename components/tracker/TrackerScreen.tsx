@@ -107,14 +107,14 @@ export default function TrackerScreen({
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
         <div style={{ fontSize: 20, fontWeight: 900, color: C.green, letterSpacing: "-0.03em" }}>{T("tracker_title")}</div>
         <div style={{ fontSize: 10, color: C.textMuted, fontWeight: 700, background: C.surfaceEl, borderRadius: 8, padding: "4px 10px" }}>
-          🔥 {streak} {T("day_streak")}
+          Streak: {streak} {T("day_streak")}
         </div>
       </div>
 
       {/* ── Sleep ─────────────────────────────────────────────────────────── */}
       <div style={card}>
         <div style={{ fontWeight: 800, fontSize: 14, marginBottom: 14, color: C.indigo, display: "flex", alignItems: "center", gap: 6 }}>
-          <span>🌙</span>{T("sleep_tracker")}
+          <span>Sleep</span>{T("sleep_tracker")}
         </div>
         {sleepLog.logged ? (
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -126,7 +126,7 @@ export default function TrackerScreen({
               <div style={{ fontSize: 14, fontWeight: 800 }}>✓ {sleepLog.hours.toFixed(1)}h</div>
               {sleepLog.bedtime !== "—" && <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{sleepLog.bedtime} → {sleepLog.wake}</div>}
               <div style={{ fontSize: 11, color: C.textMuted, marginTop: 4, fontStyle: "italic" }}>
-                {sleepLog.score >= 85 ? "Excellent sleep! 🎉" : sleepLog.score >= 65 ? "Good sleep 👍" : "Aim for 7-8 hrs"}
+                {sleepLog.score >= 85 ? "Excellent sleep!" : sleepLog.score >= 65 ? "Good sleep" : "Aim for 7-8 hrs"}
               </div>
               <button style={{ ...btn(false), fontSize: 10, padding: "4px 10px", marginTop: 8, borderRadius: 8 }}
                 onClick={() => setSleepLog({ hours: 0, bedtime: "", wake: "", score: 0, logged: false })}>
@@ -138,11 +138,11 @@ export default function TrackerScreen({
           <div>
             <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
               <button style={{ ...btn(!sleepTimerOn), flex: 1, background: sleepTimerOn ? `${C.indigo}18` : "transparent", color: sleepTimerOn ? C.indigo : C.text, borderColor: sleepTimerOn ? C.indigo : C.border }}
-                onClick={startTimer} disabled={sleepTimerOn}>😴 {T("start_sleep")}</button>
+                onClick={startTimer} disabled={sleepTimerOn}>{T("start_sleep")}</button>
               <button style={{ ...btn(sleepTimerOn, C.indigo), flex: 1, border: "none" }}
-                onClick={stopTimer} disabled={!sleepTimerOn}>☀️ {T("wake_up")}</button>
+                onClick={stopTimer} disabled={!sleepTimerOn}>{T("wake_up")}</button>
             </div>
-            {sleepTimerOn && <div style={{ fontSize: 11, color: C.indigo, textAlign: "center", marginBottom: 10, fontWeight: 600 }}>⏱ {T("timer_running")}</div>}
+            {sleepTimerOn && <div style={{ fontSize: 11, color: C.indigo, textAlign: "center", marginBottom: 10, fontWeight: 600 }}>{T("timer_running")}</div>}
             <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 8, fontWeight: 600 }}>{T("log_manual")}:</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 8 }}>
               <div>
@@ -165,7 +165,7 @@ export default function TrackerScreen({
       {/* ── Steps ─────────────────────────────────────────────────────────── */}
       <div style={card}>
         <div style={{ fontWeight: 800, fontSize: 14, marginBottom: 14, color: C.green, display: "flex", alignItems: "center", gap: 6 }}>
-          <span>👣</span>{T("step_counter")}
+          <span>Steps</span>{T("step_counter")}
           {sensorActive && <span style={{ fontSize: 9, background: `${C.green}22`, color: C.green, borderRadius: 6, padding: "2px 8px", fontWeight: 700, marginLeft: "auto" }}>● LIVE</span>}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 12 }}>
@@ -181,7 +181,7 @@ export default function TrackerScreen({
         {sensorAvail && (
           <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
             <button style={{ ...btn(!sensorActive, C.green), flex: 1, fontSize: 12 }} onClick={startSensor} disabled={sensorActive}>
-              📱 {T("auto_tracking")}
+              {T("auto_tracking")}
             </button>
             {sensorActive && <button style={{ ...btn(false), fontSize: 12, color: C.red, borderColor: C.red, padding: "8px 14px" }} onClick={stopSensor}>■ Stop</button>}
           </div>
@@ -203,7 +203,7 @@ export default function TrackerScreen({
       {/* ── Calories ──────────────────────────────────────────────────────── */}
       <div style={card}>
         <div style={{ fontWeight: 800, fontSize: 14, marginBottom: 14, color: C.gold, display: "flex", alignItems: "center", gap: 6 }}>
-          <span>🔥</span>{T("cal_tracker")}
+          <span>Cal</span>{T("cal_tracker")}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 12 }}>
           <ProgressRing pct={calPct} size={76} stroke={7} color={C.gold} bg={C.border}>
@@ -250,7 +250,7 @@ export default function TrackerScreen({
       {/* ── Water ─────────────────────────────────────────────────────────── */}
       <div style={card}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-          <span style={{ fontWeight: 800, fontSize: 14, color: C.blue }}>💧 {T("water_tracker")}</span>
+          <span style={{ fontWeight: 800, fontSize: 14, color: C.blue }}>Water {T("water_tracker")}</span>
           <span style={{ fontSize: 12, fontWeight: 800, color: C.blue }}>{water.toFixed(1)}L / {waterGoal}L</span>
         </div>
         <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 12 }}>
@@ -276,7 +276,7 @@ export default function TrackerScreen({
       {/* ── NCD Monitor ───────────────────────────────────────────────────── */}
       {profile.conditions.length > 0 && (
         <div style={{ ...card, border: `1px solid ${C.gold}44`, background: C.bg === "#080D09" ? "#1a1500" : "#fffbeb" }}>
-          <div style={{ fontWeight: 800, fontSize: 13, marginBottom: 10, color: C.gold }}>❤️ {T("ncd_title")}</div>
+          <div style={{ fontWeight: 800, fontSize: 13, marginBottom: 10, color: C.gold }}>NCD {T("ncd_title")}</div>
           {profile.conditions.map((c) => (
             <div key={c} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.gold, flexShrink: 0 }} />

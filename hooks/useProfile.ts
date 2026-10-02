@@ -11,7 +11,6 @@ const DEFAULT_PROFILE: Profile = {
   sex: "Male",
   weight: "",
   height: "",
-  religion: "None",
   budget: "",
   conditions: [],
   otherCondition: "",

@@ -43,12 +43,12 @@ export default function EditProfileModal({
   };
 
   const fields: [keyof Profile, string, string, string][] = [
-    ["fullName",  T("fullname"),   "Yohannes Belay", "text"],
-    ["email",     T("email"),      "name@gmail.com", "email"],
-    ["age",       T("age"),        "25",             "number"],
-    ["weight",    T("weight_kg"),  "70",             "number"],
-    ["height",    T("height_m"),   "1.72",           "number"],
-    ["budget",    T("budget_mo"),  "3000",           "number"],
+    ["fullName", T("fullname"), "Jon Doe", "text"],
+    ["email", T("email"), "name@gmail.com", "email"],
+    ["age", T("age"), "25", "number"],
+    ["weight", T("weight_kg"), "70", "number"],
+    ["height", T("height_m"), "1.72", "number"],
+    ["budget", T("budget_mo"), "3000", "number"],
   ];
 
   return (
@@ -95,16 +95,6 @@ export default function EditProfileModal({
             </button>
           ))}
         </div>
-      </div>
-
-      {/* Religion */}
-      <div style={{ marginBottom: 14 }}>
-        <label style={s.label}>{T("religion")}</label>
-        <select style={s.input} value={profile.religion}
-          onChange={(e) => setPF("religion", e.target.value)}>
-          {["Christian-Orthodox","Christian-Catholic","Christian-Protestant","Muslim","None"]
-            .map((r) => <option key={r}>{r}</option>)}
-        </select>
       </div>
 
       {/* Conditions */}

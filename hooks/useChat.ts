@@ -17,7 +17,7 @@ export function useChat({ profile, bmi, bmiCat, lang }: UseChatProps) {
     {
       role: "assistant",
       content:
-        "Selam! I'm your TENACHIN Wellness Coach 🌿 Powered by OpenRouter Auto. How can I support your health journey today?",
+        "Selam! I'm your TENACHIN Wellness Coach. Powered by OpenRouter Auto. How can I support your health journey today?",
     },
   ]);
   const [chatIn,   setChatIn]   = useState("");
@@ -46,9 +46,9 @@ export function useChat({ profile, bmi, bmiCat, lang }: UseChatProps) {
         profile.fullName || "User"
       }, Age:${profile.age || "?"}, Sex:${profile.sex}, Weight:${
         profile.weight || "?"
-      }kg, BMI:${bmi || "?"} (${bmiCat || "?"}), Religion:${
-        profile.religion
-      }, Budget:${profile.budget || "?"}ETB/mo, Conditions:${
+      }kg, BMI:${bmi || "?"} (${bmiCat || "?"}), Budget:${
+        profile.budget || "?"
+      }ETB/mo, Conditions:${
         profile.conditions.join(",") || "None"
       }. Respond warmly in ${langName}. Keep it 2-3 sentences. Focus on Ethiopian foods and local context.`;
 

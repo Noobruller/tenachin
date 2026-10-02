@@ -13,7 +13,7 @@ interface AuthScreenProps {
   C: ColorTokens;
   onToggleLang: () => void;
   onToggleTheme: () => void;
-  onAuthSuccess: (partialProfile: Partial<Profile>) => void;
+  onAuthSuccess: (partialProfile: Partial<Profile>, isSignup?: boolean) => void;
 }
 
 export default function AuthScreen({
@@ -25,7 +25,10 @@ export default function AuthScreen({
   const T = (key: string) => t(lang, key);
 
   const [authName,    setAuthName]    = useState("");
-  const [authEmail,   setAuthEmail]   = useState("");
+  const [authEmail,   setAuthEmail]   = useState(() => {
+    const saved = lsGet<{ email: string } | null>("tn_account", null);
+    return saved?.email ?? "";
+  });
   const [authPass,    setAuthPass]    = useState("");
   const [authErr,     setAuthErr]     = useState("");
   const [authLoading, setAuthLoading] = useState(false);
@@ -72,7 +75,7 @@ export default function AuthScreen({
       if (saved.password !== authPass) {
         setAuthErr("Incorrect password."); setAuthLoading(false); return;
       }
-      onAuthSuccess({ fullName: saved.name, email: saved.email });
+      onAuthSuccess({ fullName: saved.name, email: saved.email }, false);
       setAuthLoading(false);
     }, 800);
   };
@@ -88,7 +91,7 @@ export default function AuthScreen({
     setAuthLoading(true);
     setTimeout(() => {
       lsSet("tn_account", { name: authName.trim(), email: authEmail.trim(), password: authPass });
-      onAuthSuccess({ fullName: authName.trim(), email: authEmail.trim() });
+      onAuthSuccess({ fullName: authName.trim(), email: authEmail.trim() }, true);
       setAuthLoading(false);
       setSignupDone(true);
       setTimeout(() => setSignupDone(false), 2200);
@@ -131,7 +134,7 @@ export default function AuthScreen({
             }}
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
-          <span style={{ fontSize: 44, display: "none" }}>🌿</span>
+          <span style={{ fontSize: 44, display: "none", color: "#fff", fontWeight: 900 }}>T</span>
         </div>
         <div style={{ fontSize: 30, fontWeight: 900, color: C.green, letterSpacing: "-0.05em", lineHeight: 1 }}>
           TENACHIN
@@ -144,7 +147,7 @@ export default function AuthScreen({
       {/* Signup success */}
       {signupDone && (
         <div style={{ ...s.card, width: "100%", maxWidth: 360, textAlign: "center", borderColor: C.green, boxShadow: C.shadowGreen }}>
-          <div style={{ fontSize: 32, marginBottom: 8 }}>🎉</div>
+          <div style={{ fontSize: 32, marginBottom: 8, color: C.green, fontWeight: 900 }}>Welcome!</div>
           <div style={{ fontWeight: 800, color: C.green, fontSize: 15 }}>{T("signed_up")}</div>
         </div>
       )}
@@ -214,7 +217,7 @@ export default function AuthScreen({
       {/* Lang + Theme toggles */}
       <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
         {(["en", "am", "or"] as const).map((c) => {
-          const labels: Record<string, string> = { en: "🇬🇧 EN", am: "🇪🇹 አማ", or: "🟢 Oro" };
+          const labels: Record<string, string> = { en: "EN", am: "አማ", or: "Oro" };
           return (
             <button key={c}
               style={{
@@ -235,7 +238,11 @@ export default function AuthScreen({
             padding: "5px 10px", cursor: "pointer", fontSize: 12, outline: "none",
           }}
           onClick={onToggleTheme}
-        >{isDark ? "☀️" : "🌙"}</button>
+        >{isDark ? (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        ) : (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        )}</button>
       </div>
     </div>
   );

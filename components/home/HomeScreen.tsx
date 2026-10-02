@@ -43,10 +43,10 @@ export default function HomeScreen({
     : C.red;
 
   const TIPS = [
-    { i: "🚶", en: "Aim for 10,000 steps. A 15-min post-meal walk helps digestion.", am: "10,000 ደረጃዎችን ያለፉ። ከምግብ 15 ደቂቃ መሄድ ምግብ መፈጨትን ያሻሽላል።", or: "Tarkaanfii 10,000 gahi. Booda nyaataa daqiiqaa 15 deemi." },
-    { i: "💧", en: "Drink 2.5L daily. Add lemon to your morning buna.", am: "2.5 ሊትር ይጠጡ። ለጠዋት ቡና ውሃ ሎሚ ይጨምሩ።", or: "Lolaa 2.5 dhugu. Buna ganamaa limuu itti dabalaa." },
-    { i: "😴", en: "7-9 hrs optimal. Consistent sleep times boost immunity.", am: "7-9 ሰዓት ተኛ። ቀጣይ የእንቅልፍ ሰዓት ያሻሽላሉ።", or: "Sa'aa 7-9 rafi. Yeroon hirribaa wal-fakkaatan dhukkuba ittisa." },
-    { i: "🥗", en: "Ethiopian fasting foods (gomen, azifa) are nutrient powerhouses.", am: "ጎመን፣ አዚፋ ወይም ሚሰር ሸሮ ልዩ ንጥረ ነገሮች ምንጭ ናቸው።", or: "Nyaata sooma (gomen, azifa) nyaataan guutuu dha." },
+    { i: "Steps", en: "Aim for 10,000 steps. A 15-min post-meal walk helps digestion.", am: "10,000 ደረጃዎችን ያለፉ። ከምግብ 15 ደቂቃ መሄድ ምግብ መፈጨትን ያሻሽላል።", or: "Tarkaanfii 10,000 gahi. Booda nyaataa daqiiqaa 15 deemi." },
+    { i: "Water", en: "Drink 2.5L daily. Add lemon to your morning buna.", am: "2.5 ሊትር ይጠጡ። ለጠዋት ቡና ውሃ ሎሚ ይጨምሩ።", or: "Lolaa 2.5 dhugu. Buna ganamaa limuu itti dabalaa." },
+    { i: "Sleep", en: "7-9 hrs optimal. Consistent sleep times boost immunity.", am: "7-9 ሰዓት ተኛ። ቀጣይ የእንቅልፍ ሰዓት ያሻሽላሉ።", or: "Sa'aa 7-9 rafi. Yeroon hirribaa wal-fakkaatan dhukkuba ittisa." },
+    { i: "Nutrition", en: "Ethiopian plant-based foods (gomen, azifa) are nutrient powerhouses.", am: "ጎመን፣ አዚፋ ወይም ሚሰር ሸሮ ልዩ ንጥረ ነገሮች ምንጭ ናቸው።", or: "Nyaata biqiltootaa (gomen, azifa) nyaataan guutuu dha." },
   ];
 
   const dateStr = new Date().toLocaleDateString(
@@ -70,7 +70,7 @@ export default function HomeScreen({
       {/* Greeting */}
       <div style={{ marginBottom: 20 }}>
         <div style={{ fontSize: 24, fontWeight: 900, color: C.text, letterSpacing: "-0.03em" }}>
-          {greeting()}{profile.fullName ? `, ${profile.fullName.split(" ")[0]}` : ""} 👋
+          {greeting()}{profile.fullName ? `, ${profile.fullName.split(" ")[0]}` : ""}
         </div>
         <div style={{ fontSize: 12, color: C.textMuted, marginTop: 4, fontWeight: 500 }}>{dateStr}</div>
       </div>
@@ -78,13 +78,13 @@ export default function HomeScreen({
       {/* Quick stats grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 16 }}>
         {[
-          { i: "👣", v: steps >= 1000 ? `${(steps / 1000).toFixed(1)}k` : String(steps), l: T("steps_label"), c: C.green },
-          { i: "💧", v: `${water.toFixed(1)}L`, l: T("water_label"), c: C.blue },
-          { i: "🔥", v: String(netCal), l: T("cal_label"), c: C.gold },
-          { i: "😴", v: sleepLog.logged ? `${sleepLog.hours.toFixed(1)}h` : "—", l: T("sleep_label"), c: C.indigo },
+          { i: "Steps", v: steps >= 1000 ? `${(steps / 1000).toFixed(1)}k` : String(steps), l: T("steps_label"), c: C.green },
+          { i: "Water", v: `${water.toFixed(1)}L`, l: T("water_label"), c: C.blue },
+          { i: "Cal", v: String(netCal), l: T("cal_label"), c: C.gold },
+          { i: "Sleep", v: sleepLog.logged ? `${sleepLog.hours.toFixed(1)}h` : "—", l: T("sleep_label"), c: C.indigo },
         ].map((q) => (
           <div key={q.l} style={{ background: C.surfaceEl, border: `1px solid ${C.border}`, borderRadius: 16, padding: "12px 8px", textAlign: "center" }}>
-            <div style={{ fontSize: 18, marginBottom: 4 }}>{q.i}</div>
+            <div style={{ fontSize: 12, marginBottom: 4, fontWeight: 700, color: q.c }}>{q.i}</div>
             <div style={{ fontSize: 14, fontWeight: 800, color: q.c, letterSpacing: "-0.02em", lineHeight: 1 }}>{q.v}</div>
             <div style={{ fontSize: 9, color: C.textMuted, marginTop: 3, fontWeight: 600, letterSpacing: "0.04em" }}>{q.l}</div>
           </div>
@@ -125,7 +125,7 @@ export default function HomeScreen({
       </div>
       {TIPS.map((tip, i) => (
         <div key={i} style={{ ...card, display: "flex", gap: 14, alignItems: "flex-start" }}>
-          <div style={{ fontSize: 26, flexShrink: 0, lineHeight: 1, marginTop: 2 }}>{tip.i}</div>
+          <div style={{ fontSize: 13, fontWeight: 800, color: C.green, flexShrink: 0, lineHeight: 1, marginTop: 2 }}>{tip.i}</div>
           <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.55 }}>
             {lang === "am" ? tip.am : lang === "or" ? tip.or : tip.en}
           </div>

@@ -16,7 +16,7 @@ interface FoodScreenProps {
   C: ColorTokens;
 }
 
-type FilterKey = "all" | "fasting" | "breakfast" | "veg" | "meat" | "snack" | "drink";
+type FilterKey = "all" | "breakfast" | "veg" | "meat" | "seafood" | "legumes" | "dairy" | "grains" | "snack" | "drink";
 
 export default function FoodScreen({
   foodLog, setFoodLog, setCalIn, calorieGoal, profile, lang, C,
@@ -27,22 +27,22 @@ export default function FoodScreen({
   const [aiRec,      setAiRec]      = useState("");
   const [aiLoading,  setAiLoading]  = useState(false);
 
-  const isFast = ["Christian-Orthodox", "Christian-Catholic"].includes(profile.religion);
-
-  const filtered = foodFilter === "all"
+  const filtered = (foodFilter === "all"
     ? FOODS
-    : foodFilter === "fasting"
-    ? FOODS.filter((f) => f.fast)
-    : FOODS.filter((f) => f.cat === foodFilter);
+    : FOODS.filter((f) => f.cat === foodFilter)
+  ).slice().sort((a, b) => a.name.localeCompare(b.name));
 
   const totalLogged = foodLog.reduce((s, f) => s + f.cal, 0);
 
   const FILTERS: [FilterKey, string][] = [
     ["all", T("filter_all")],
-    ["fasting", T("filter_fasting")],
+    ["meat", T("filter_meat")],
+    ["seafood", "Seafood"],
+    ["legumes", "Legumes"],
+    ["dairy", "Dairy"],
+    ["grains", "Grains"],
     ["breakfast", T("filter_breakfast")],
     ["veg", T("filter_veg")],
-    ["meat", T("filter_meat")],
     ["snack", T("filter_snack")],
     ["drink", T("filter_drink")],
   ];
@@ -51,8 +51,8 @@ export default function FoodScreen({
     setAiLoading(true); setAiRec("");
     try {
       const langName = lang === "en" ? "English" : lang === "am" ? "Amharic" : "Afaan Oromoo";
-      const p = `Recommend a full Ethiopian day meal plan. BMI profile, Budget:${Math.round((parseFloat(profile.budget || "2000")) / 30)}ETB/day, Conditions:${profile.conditions.join(",") || "none"}, Sex:${profile.sex}, Age:${profile.age}. ${isFast ? "Fasting foods only (vegan)." : ""} List breakfast, lunch, dinner, snack with calories. 3-4 sentences. Respond in ${langName}.`;
-      const r = await orChat("You are a concise Ethiopian nutritionist.", [{ role: "user", content: p }]);
+      const p = `Recommend a full day high-protein meal plan using diverse world cuisines. BMI profile, Budget:${Math.round((parseFloat(profile.budget || "2000")) / 30)}/day, Conditions:${profile.conditions.join(",") || "none"}, Sex:${profile.sex}, Age:${profile.age}. Include foods from different countries. List breakfast, lunch, dinner, snack with calories and protein. 3-4 sentences. Respond in ${langName}.`;
+      const r = await orChat("You are a concise global nutritionist specializing in high-protein diets from world cuisines.", [{ role: "user", content: p }]);
       setAiRec(r);
     } catch (e) {
       setAiRec("Error: " + (e instanceof Error ? e.message : String(e)));
@@ -77,7 +77,7 @@ export default function FoodScreen({
 
   return (
     <div style={{ padding: "18px 20px" }}>
-      <div style={{ fontSize: 20, fontWeight: 900, color: C.green, letterSpacing: "-0.03em", marginBottom: 4 }}>🍽️ {T("food_title")}</div>
+      <div style={{ fontSize: 20, fontWeight: 900, color: C.green, letterSpacing: "-0.03em", marginBottom: 4 }}>{T("food_title")}</div>
       <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 16, fontWeight: 500 }}>{T("food_subtitle")}</div>
 
       {/* Today's log */}
@@ -109,7 +109,7 @@ export default function FoodScreen({
       {/* AI Meal Plan */}
       <div style={card}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-          <span style={{ fontSize: 13, fontWeight: 800 }}>🤖 {T("ai_meal_plan")}</span>
+          <span style={{ fontSize: 13, fontWeight: 800 }}>AI {T("ai_meal_plan")}</span>
           <button style={{ background: C.green, color: "#fff", border: "none", borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 11, fontWeight: 600 }}
             onClick={getFoodRec} disabled={aiLoading}>
             {aiLoading ? "…" : T("generate")}
@@ -119,7 +119,7 @@ export default function FoodScreen({
           <div style={{ fontSize: 12, color: C.textSub, lineHeight: 1.65 }}>{aiRec}</div>
         ) : (
           <div style={{ fontSize: 11, color: C.textMuted }}>
-            {T("budget_day")}: ~{Math.round((parseFloat(profile.budget || "2000")) / 30)} ETB · {isFast ? T("fasting_mode") : T("full_menu")}
+            {T("budget_day")}: ~{Math.round((parseFloat(profile.budget || "2000")) / 30)} ETB
           </div>
         )}
       </div>
@@ -134,12 +134,17 @@ export default function FoodScreen({
       {/* Food list */}
       {filtered.map((f, i) => (
         <div key={i} style={{ ...card, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px" }}>
-          <div>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>{f.name}</div>
-            <div style={{ fontSize: 11, color: C.textMuted }}>{f.cal} kcal · {f.price}</div>
-            {f.fast && <span style={{ fontSize: 10, background: `${C.green}22`, color: C.green, borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>{T("fasting_ok")}</span>}
+            <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 3 }}>
+              {f.cal} kcal · <span style={{ color: C.blue, fontWeight: 700 }}>{f.protein}g protein</span> · {f.price}
+            </div>
+            <div style={{ display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center" }}>
+              <span style={{ fontSize: 10, background: `${C.blue}18`, color: C.blue, borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>{f.origin}</span>
+
+            </div>
           </div>
-          <button style={{ background: C.green, color: "#fff", border: "none", borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 11, fontWeight: 600 }}
+          <button style={{ background: C.green, color: "#fff", border: "none", borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 11, fontWeight: 600, flexShrink: 0 }}
             onClick={() => { setFoodLog((l) => [...l, f]); setCalIn((c) => (c as number) + f.cal); }}>
             + {T("log_food")}
           </button>

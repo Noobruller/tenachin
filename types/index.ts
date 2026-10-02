@@ -40,7 +40,7 @@ export interface Profile {
   sex: "Male" | "Female";
   weight: string;
   height: string;
-  religion: string;
+
   budget: string;
   conditions: string[];
   otherCondition: string;
@@ -56,14 +56,15 @@ export interface SleepLog {
 }
 
 // ─── Food ───────────────────────────────────────────────────────────────────
-export type FoodCategory = "bread" | "veg" | "meat" | "breakfast" | "snack" | "drink";
+export type FoodCategory = "bread" | "veg" | "meat" | "breakfast" | "snack" | "drink" | "seafood" | "legumes" | "dairy" | "grains";
 
 export interface FoodItem {
   name: string;
   cal: number;
+  protein: number;   // grams of protein per serving
   price: string;
   cat: FoodCategory;
-  fast: boolean;
+  origin: string;    // cuisine / country of origin
 }
 
 // ─── AI Chat ────────────────────────────────────────────────────────────────
@@ -72,17 +73,6 @@ export interface ChatMessage {
   content: string;
 }
 
-// ─── Premium Plans ──────────────────────────────────────────────────────────
-export type PlanBadge = "most_popular" | "best_value" | null;
-
-export interface PremiumPlan {
-  id: string;
-  price: string;
-  period: string;
-  badge: PlanBadge;
-  features: string[];
-}
-
 // ─── App Screens & Tabs ─────────────────────────────────────────────────────
 export type Screen = "login" | "signup" | "app";
-export type Tab = "onboarding" | "home" | "tracker" | "food" | "coach" | "premium";
+export type Tab = "onboarding" | "home" | "tracker" | "food" | "workout" | "coach";

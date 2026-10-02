@@ -47,8 +47,8 @@ export default function CoachScreen({
         display: "flex", alignItems: "center", gap: 12,
         background: C.surface, flexShrink: 0,
       }}>
-        <div style={{ width: 40, height: 40, borderRadius: 14, background: `linear-gradient(135deg,${C.green},#0A5C2E)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: C.shadowGreen }}>
-          🌿
+        <div style={{ width: 40, height: 40, borderRadius: 14, background: `linear-gradient(135deg,${C.green},#0A5C2E)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: "#fff", boxShadow: C.shadowGreen }}>
+          T
         </div>
         <div>
           <div style={{ fontWeight: 800, fontSize: 14, color: C.text }}>{T("coach_title")}</div>
@@ -62,7 +62,7 @@ export default function CoachScreen({
       {/* Error */}
       {chatErr && (
         <div style={{ margin: "8px 16px", padding: "8px 12px", background: `${C.red}15`, borderRadius: 10, fontSize: 11, color: C.red, flexShrink: 0 }}>
-          ⚠ {chatErr}
+          ! {chatErr}
         </div>
       )}
 
@@ -71,8 +71,8 @@ export default function CoachScreen({
         {messages.map((m, i) => (
           <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", alignItems: "flex-end", gap: 8 }}>
             {m.role === "assistant" && (
-              <div style={{ width: 28, height: 28, borderRadius: 10, background: C.green, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, flexShrink: 0 }}>
-                🌿
+              <div style={{ width: 28, height: 28, borderRadius: 10, background: C.green, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#fff", flexShrink: 0 }}>
+                T
               </div>
             )}
             <div style={{
@@ -92,7 +92,7 @@ export default function CoachScreen({
         {/* Typing indicator */}
         {chatLoad && (
           <div style={{ display: "flex", alignItems: "flex-end", gap: 8 }}>
-            <div style={{ width: 28, height: 28, borderRadius: 10, background: C.green, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>🌿</div>
+            <div style={{ width: 28, height: 28, borderRadius: 10, background: C.green, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: "#fff" }}>T</div>
             <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: "18px 18px 18px 4px", padding: "12px 16px", display: "flex", gap: 4 }}>
               {[0, 1, 2].map((i) => (
                 <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: C.green, animation: "bounce 1.2s infinite", animationDelay: `${i * 0.18}s` }} />
