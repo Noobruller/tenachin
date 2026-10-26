@@ -55,11 +55,26 @@ export default function EditProfileModal({
     <div
       style={{
         position: "fixed", inset: 0, zIndex: 100,
-        background: C.bg, overflowY: "auto",
+        background: "rgba(0, 0, 0, 0.6)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+        overflowY: "auto",
         padding: "20px 20px 60px",
         fontFamily: "'DM Sans', system-ui, sans-serif",
       }}
     >
+      <div
+        className="desktop-modal-card"
+        style={{
+          maxWidth: 500,
+          margin: "20px auto",
+          background: C.card,
+          border: `1px solid ${C.cardBorder}`,
+          borderRadius: 24,
+          padding: "24px 22px 32px",
+          boxShadow: C.shadow,
+        }}
+      >
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, paddingTop: 8 }}>
         <button
@@ -127,6 +142,7 @@ export default function EditProfileModal({
         style={{ ...s.btn(false), width: "100%", padding: "12px", fontSize: 13, color: C.red, borderColor: C.red }}
         onClick={onSignOut}
       >{T("sign_out")}</button>
+      </div>
     </div>
   );
 }

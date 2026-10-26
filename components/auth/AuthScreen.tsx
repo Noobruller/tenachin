@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import type { ColorTokens, Lang, Screen, Profile, Theme } from "@/types";
 import { t } from "@/lib/i18n";
 import { lsGet, lsSet } from "@/hooks/useLocalStorage";
+import { supabase } from "@/lib/supabase";
 
 interface AuthScreenProps {
   screen: Screen;
@@ -61,12 +62,43 @@ export default function AuthScreen({
     },
   };
 
-  const doLogin = () => {
+  const doLogin = async () => {
     setAuthErr("");
     if (!authEmail.trim() || !authPass.trim()) {
       setAuthErr("Enter email and password."); return;
     }
     setAuthLoading(true);
+
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: authEmail.trim(),
+          password: authPass,
+        });
+
+        if (error) {
+          setAuthErr(error.message);
+          setAuthLoading(false);
+          return;
+        }
+
+        const fullName =
+          data.user?.user_metadata?.full_name ||
+          data.user?.user_metadata?.name ||
+          authEmail.trim().split("@")[0];
+
+        onAuthSuccess({ fullName, email: data.user?.email || authEmail.trim() }, false);
+        setAuthLoading(false);
+        return;
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "Failed to sign in.";
+        setAuthErr(msg);
+        setAuthLoading(false);
+        return;
+      }
+    }
+
+    // Fallback to local storage if Supabase credentials are not set
     setTimeout(() => {
       const saved = lsGet<{ email: string; password: string; name: string } | null>("tn_account", null);
       if (!saved || saved.email !== authEmail.trim()) {
@@ -80,7 +112,7 @@ export default function AuthScreen({
     }, 800);
   };
 
-  const doSignup = () => {
+  const doSignup = async () => {
     setAuthErr("");
     if (!authName.trim() || !authEmail.trim() || !authPass.trim()) {
       setAuthErr("All fields are required."); return;
@@ -89,6 +121,40 @@ export default function AuthScreen({
       setAuthErr("Password must be 6+ characters."); return;
     }
     setAuthLoading(true);
+
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: authEmail.trim(),
+          password: authPass,
+          options: {
+            data: {
+              full_name: authName.trim(),
+            },
+          },
+        });
+
+        if (error) {
+          setAuthErr(error.message);
+          setAuthLoading(false);
+          return;
+        }
+
+        lsSet("tn_account", { name: authName.trim(), email: authEmail.trim(), password: authPass });
+        onAuthSuccess({ fullName: authName.trim(), email: data.user?.email || authEmail.trim() }, true);
+        setAuthLoading(false);
+        setSignupDone(true);
+        setTimeout(() => setSignupDone(false), 2200);
+        return;
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "Failed to sign up.";
+        setAuthErr(msg);
+        setAuthLoading(false);
+        return;
+      }
+    }
+
+    // Fallback to local storage
     setTimeout(() => {
       lsSet("tn_account", { name: authName.trim(), email: authEmail.trim(), password: authPass });
       onAuthSuccess({ fullName: authName.trim(), email: authEmail.trim() }, true);

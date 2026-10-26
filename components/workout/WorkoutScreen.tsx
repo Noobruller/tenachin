@@ -154,78 +154,86 @@ export default function WorkoutScreen({ profile, C, lang }: WorkoutScreenProps) 
         {/* Recommended for user */}
         {recommendedPlans.length > 0 && (
           <>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: C.green, marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: C.green, marginBottom: 12 }}>
               {T("recommended_for_you")}
             </div>
-            {recommendedPlans.map((plan) => (
-              <div key={plan.id} style={{ ...card, border: `1.5px solid ${C.green}44` }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 3 }}>{plan.title}</div>
-                    <div style={{ fontSize: 11, color: C.textMuted, lineHeight: 1.4 }}>{plan.subtitle}</div>
+            <div className="desktop-grid-cards" style={{ marginBottom: 20 }}>
+              {recommendedPlans.map((plan) => (
+                <div key={plan.id} style={{ ...card, border: `1.5px solid ${C.green}44`, marginBottom: 0, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 800, fontSize: 15, color: C.text, marginBottom: 3 }}>{plan.title}</div>
+                        <div style={{ fontSize: 11, color: C.textMuted, lineHeight: 1.4 }}>{plan.subtitle}</div>
+                      </div>
+                      <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 12 }}>
+                        <div style={{ fontSize: 20, fontWeight: 900, color: C.green }}>{plan.totalMinutes}</div>
+                        <div style={{ fontSize: 9, color: C.textMuted, fontWeight: 600 }}>MIN</div>
+                      </div>
+                    </div>
+                    {plan.targetConditions.length > 0 && (
+                      <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 10 }}>
+                        {plan.targetConditions.map((c) => (
+                          <span key={c} style={{
+                            fontSize: 9, fontWeight: 700,
+                            background: userConditions.includes(c) ? `${C.green}22` : `${C.blue}18`,
+                            color: userConditions.includes(c) ? C.green : C.blue,
+                            borderRadius: 6, padding: "2px 8px",
+                          }}>{c}</span>
+                        ))}
+                      </div>
+                    )}
+                    <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 14 }}>
+                      {plan.exercises.slice(0, 4).map((ex, i) => (
+                        <span key={i} style={{ fontSize: 9, color: C.textMuted, background: C.surfaceEl, borderRadius: 6, padding: "2px 8px" }}>
+                          {ex.name}
+                        </span>
+                      ))}
+                      {plan.exercises.length > 4 && (
+                        <span style={{ fontSize: 9, color: C.textMuted }}>+{plan.exercises.length - 4} more</span>
+                      )}
+                    </div>
                   </div>
-                  <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 12 }}>
-                    <div style={{ fontSize: 20, fontWeight: 900, color: C.green }}>{plan.totalMinutes}</div>
-                    <div style={{ fontSize: 9, color: C.textMuted, fontWeight: 600 }}>MIN</div>
-                  </div>
+                  <button style={btnStyle(C.green)} onClick={() => startWorkout(plan)}>
+                    {T("start_workout")}
+                  </button>
                 </div>
-                {plan.targetConditions.length > 0 && (
-                  <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 10 }}>
-                    {plan.targetConditions.map((c) => (
-                      <span key={c} style={{
-                        fontSize: 9, fontWeight: 700,
-                        background: userConditions.includes(c) ? `${C.green}22` : `${C.blue}18`,
-                        color: userConditions.includes(c) ? C.green : C.blue,
-                        borderRadius: 6, padding: "2px 8px",
-                      }}>{c}</span>
-                    ))}
-                  </div>
-                )}
-                <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 12 }}>
-                  {plan.exercises.slice(0, 4).map((ex, i) => (
-                    <span key={i} style={{ fontSize: 9, color: C.textMuted, background: C.surfaceEl, borderRadius: 6, padding: "2px 8px" }}>
-                      {ex.name}
-                    </span>
-                  ))}
-                  {plan.exercises.length > 4 && (
-                    <span style={{ fontSize: 9, color: C.textMuted }}>+{plan.exercises.length - 4} more</span>
-                  )}
-                </div>
-                <button style={btnStyle(C.green)} onClick={() => startWorkout(plan)}>
-                  {T("start_workout")}
-                </button>
-              </div>
-            ))}
+              ))}
+            </div>
           </>
         )}
 
         {/* Other plans */}
         {otherPlans.length > 0 && (
           <>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: C.textMuted, marginBottom: 10, marginTop: 8 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: C.textMuted, marginBottom: 12, marginTop: 8 }}>
               {T("other_plans")}
             </div>
-            {otherPlans.map((plan) => (
-              <div key={plan.id} style={card}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+            <div className="desktop-grid-cards">
+              {otherPlans.map((plan) => (
+                <div key={plan.id} style={{ ...card, marginBottom: 0, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: 13, color: C.text }}>{plan.title}</div>
-                    <div style={{ fontSize: 10, color: C.textMuted }}>{plan.subtitle}</div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                      <div>
+                        <div style={{ fontWeight: 700, fontSize: 13, color: C.text }}>{plan.title}</div>
+                        <div style={{ fontSize: 10, color: C.textMuted }}>{plan.subtitle}</div>
+                      </div>
+                      <div style={{ fontSize: 12, fontWeight: 800, color: C.textMuted }}>{plan.totalMinutes} min</div>
+                    </div>
+                    {plan.targetConditions.length > 0 && (
+                      <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 10 }}>
+                        {plan.targetConditions.map((c) => (
+                          <span key={c} style={{ fontSize: 9, fontWeight: 700, background: `${C.blue}18`, color: C.blue, borderRadius: 6, padding: "2px 8px" }}>{c}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: C.textMuted }}>{plan.totalMinutes} min</div>
+                  <button style={{ ...outlineBtn, marginTop: 8 }} onClick={() => startWorkout(plan)}>
+                    {T("start_workout")}
+                  </button>
                 </div>
-                {plan.targetConditions.length > 0 && (
-                  <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 10 }}>
-                    {plan.targetConditions.map((c) => (
-                      <span key={c} style={{ fontSize: 9, fontWeight: 700, background: `${C.blue}18`, color: C.blue, borderRadius: 6, padding: "2px 8px" }}>{c}</span>
-                    ))}
-                  </div>
-                )}
-                <button style={outlineBtn} onClick={() => startWorkout(plan)}>
-                  {T("start_workout")}
-                </button>
-              </div>
-            ))}
+              ))}
+            </div>
           </>
         )}
       </div>
@@ -246,7 +254,7 @@ export default function WorkoutScreen({ profile, C, lang }: WorkoutScreenProps) 
     const dashOffset = circumference - (pct / 100) * circumference;
 
     return (
-      <div style={{ padding: "18px 20px" }}>
+      <div style={{ padding: "18px 20px", maxWidth: 640, margin: "0 auto" }}>
         {/* Top bar */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
           <button style={{ ...outlineBtn, padding: "6px 12px", fontSize: 11 }} onClick={resetWorkout}>
@@ -379,7 +387,7 @@ export default function WorkoutScreen({ profile, C, lang }: WorkoutScreenProps) 
   // ── COMPLETE VIEW ─────────────────────────────────────────────────────────
   if (state === "complete" && activePlan) {
     return (
-      <div style={{ padding: "18px 20px" }}>
+      <div style={{ padding: "18px 20px", maxWidth: 640, margin: "0 auto" }}>
         <div style={{ textAlign: "center", padding: "30px 0" }}>
           <div style={{
             width: 80, height: 80, borderRadius: 40, margin: "0 auto 20px",

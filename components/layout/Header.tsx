@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import type { ColorTokens, Lang, Theme } from "@/types";
+import type { ColorTokens, Lang, Tab, Theme } from "@/types";
+import { t } from "@/lib/i18n";
 
 interface HeaderProps {
   C: ColorTokens;
@@ -11,21 +12,32 @@ interface HeaderProps {
   onToggleTheme: () => void;
   onEditProfile: () => void;
   hideProfileBtn?: boolean;
+  tab?: Tab;
+  setTab?: (t: Tab) => void;
 }
 
+const DESKTOP_NAV_ITEMS: { id: Tab; key: string }[] = [
+  { id: "home",    key: "nav_home"    },
+  { id: "tracker", key: "nav_tracker" },
+  { id: "food",    key: "nav_food"    },
+  { id: "workout", key: "nav_workout" },
+  { id: "coach",   key: "nav_coach"   },
+];
+
 export default function Header({
-  C, lang, theme, onToggleLang, onToggleTheme, onEditProfile, hideProfileBtn = false,
+  C, lang, theme, onToggleLang, onToggleTheme, onEditProfile, hideProfileBtn = false, tab, setTab,
 }: HeaderProps) {
   const isDark = theme === "dark";
+  const T = (key: string) => t(lang, key);
 
   const btnBase: React.CSSProperties = {
     background: "transparent",
     color: C.text,
     border: `1.5px solid ${C.border}`,
     borderRadius: 10,
-    padding: "5px 9px",
+    padding: "6px 11px",
     cursor: "pointer",
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: 600,
     transition: "all 0.18s",
     outline: "none",
@@ -35,7 +47,7 @@ export default function Header({
   return (
     <header
       style={{
-        padding: "12px 16px 10px",
+        padding: "14px 24px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -45,7 +57,9 @@ export default function Header({
         WebkitBackdropFilter: "blur(20px)",
         position: "sticky",
         top: 0,
-        zIndex: 30,
+        zIndex: 40,
+        width: "100%",
+        boxSizing: "border-box",
       }}
     >
       {/* Logo + Brand */}
@@ -85,6 +99,47 @@ export default function Header({
           </div>
         </div>
       </div>
+
+      {/* Desktop Navigation */}
+      {setTab && (
+        <nav
+          className="desktop-nav"
+          style={{
+            alignItems: "center",
+            gap: 6,
+            background: C.surfaceEl,
+            padding: "4px 6px",
+            borderRadius: 14,
+            border: `1px solid ${C.border}`,
+          }}
+        >
+          {DESKTOP_NAV_ITEMS.map((item) => {
+            const active = tab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setTab(item.id)}
+                style={{
+                  background: active ? C.green : "transparent",
+                  color: active ? "#fff" : C.text,
+                  border: "none",
+                  borderRadius: 10,
+                  padding: "7px 14px",
+                  fontSize: 12,
+                  fontWeight: active ? 800 : 600,
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+              >
+                {T(item.key)}
+              </button>
+            );
+          })}
+        </nav>
+      )}
 
       {/* Controls */}
       <div style={{ display: "flex", alignItems: "center", gap: 6 }}>

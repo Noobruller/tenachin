@@ -80,48 +80,51 @@ export default function FoodScreen({
       <div style={{ fontSize: 20, fontWeight: 900, color: C.green, letterSpacing: "-0.03em", marginBottom: 4 }}>{T("food_title")}</div>
       <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 16, fontWeight: 500 }}>{T("food_subtitle")}</div>
 
-      {/* Today's log */}
-      <div style={card}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-          <span style={{ fontSize: 13, fontWeight: 800 }}>{T("todays_log")}</span>
-          <span style={{ fontSize: 12, color: totalLogged > calorieGoal ? C.red : C.green, fontWeight: 800 }}>
-            {totalLogged} / {calorieGoal} kcal
-          </span>
-        </div>
-        <div style={{ height: 6, borderRadius: 3, background: C.border, overflow: "hidden", marginBottom: 8 }}>
-          <div style={{ height: "100%", width: `${Math.min((totalLogged / calorieGoal) * 100, 100)}%`, background: totalLogged > calorieGoal ? C.red : C.green, borderRadius: 3, transition: "width 0.4s" }} />
-        </div>
-        {foodLog.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 4 }}>
-            {foodLog.map((f, i) => (
-              <span key={i} style={{ fontSize: 10, background: C.greenGlass, color: C.green, borderRadius: 8, padding: "3px 8px", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 2 }}>
-                {f.name} ({f.cal})
-                <button style={{ border: "none", background: "none", color: C.red, cursor: "pointer", fontSize: 11, padding: "0 2px" }}
-                  onClick={() => { setFoodLog((l) => l.filter((_, j) => j !== i)); setCalIn((c) => Math.max(0, (c as number) - f.cal)); }}>
-                  ×
-                </button>
-              </span>
-            ))}
+      {/* Top summary row: Today's log & AI meal plan */}
+      <div className="desktop-grid-2" style={{ marginBottom: 14 }}>
+        {/* Today's log */}
+        <div style={card}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+            <span style={{ fontSize: 13, fontWeight: 800 }}>{T("todays_log")}</span>
+            <span style={{ fontSize: 12, color: totalLogged > calorieGoal ? C.red : C.green, fontWeight: 800 }}>
+              {totalLogged} / {calorieGoal} kcal
+            </span>
           </div>
-        )}
-      </div>
+          <div style={{ height: 6, borderRadius: 3, background: C.border, overflow: "hidden", marginBottom: 8 }}>
+            <div style={{ height: "100%", width: `${Math.min((totalLogged / calorieGoal) * 100, 100)}%`, background: totalLogged > calorieGoal ? C.red : C.green, borderRadius: 3, transition: "width 0.4s" }} />
+          </div>
+          {foodLog.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 4 }}>
+              {foodLog.map((f, i) => (
+                <span key={i} style={{ fontSize: 10, background: C.greenGlass, color: C.green, borderRadius: 8, padding: "3px 8px", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 2 }}>
+                  {f.name} ({f.cal})
+                  <button style={{ border: "none", background: "none", color: C.red, cursor: "pointer", fontSize: 11, padding: "0 2px" }}
+                    onClick={() => { setFoodLog((l) => l.filter((_, j) => j !== i)); setCalIn((c) => Math.max(0, (c as number) - f.cal)); }}>
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
 
-      {/* AI Meal Plan */}
-      <div style={card}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-          <span style={{ fontSize: 13, fontWeight: 800 }}>AI {T("ai_meal_plan")}</span>
-          <button style={{ background: C.green, color: "#fff", border: "none", borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 11, fontWeight: 600 }}
-            onClick={getFoodRec} disabled={aiLoading}>
-            {aiLoading ? "…" : T("generate")}
-          </button>
-        </div>
-        {aiRec ? (
-          <div style={{ fontSize: 12, color: C.textSub, lineHeight: 1.65 }}>{aiRec}</div>
-        ) : (
-          <div style={{ fontSize: 11, color: C.textMuted }}>
-            {T("budget_day")}: ~{Math.round((parseFloat(profile.budget || "2000")) / 30)} ETB
+        {/* AI Meal Plan */}
+        <div style={card}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+            <span style={{ fontSize: 13, fontWeight: 800 }}>AI {T("ai_meal_plan")}</span>
+            <button style={{ background: C.green, color: "#fff", border: "none", borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 11, fontWeight: 600 }}
+              onClick={getFoodRec} disabled={aiLoading}>
+              {aiLoading ? "…" : T("generate")}
+            </button>
           </div>
-        )}
+          {aiRec ? (
+            <div style={{ fontSize: 12, color: C.textSub, lineHeight: 1.65 }}>{aiRec}</div>
+          ) : (
+            <div style={{ fontSize: 11, color: C.textMuted }}>
+              {T("budget_day")}: ~{Math.round((parseFloat(profile.budget || "2000")) / 30)} ETB
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Filter chips */}
@@ -132,24 +135,25 @@ export default function FoodScreen({
       </div>
 
       {/* Food list */}
-      {filtered.map((f, i) => (
-        <div key={i} style={{ ...card, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px" }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>{f.name}</div>
-            <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 3 }}>
-              {f.cal} kcal · <span style={{ color: C.blue, fontWeight: 700 }}>{f.protein}g protein</span> · {f.price}
+      <div className="desktop-grid-cards">
+        {filtered.map((f, i) => (
+          <div key={i} style={{ ...card, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", marginBottom: 0 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>{f.name}</div>
+              <div style={{ fontSize: 11, color: C.textMuted, marginBottom: 3 }}>
+                {f.cal} kcal · <span style={{ color: C.blue, fontWeight: 700 }}>{f.protein}g protein</span> · {f.price}
+              </div>
+              <div style={{ display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center" }}>
+                <span style={{ fontSize: 10, background: `${C.blue}18`, color: C.blue, borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>{f.origin}</span>
+              </div>
             </div>
-            <div style={{ display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center" }}>
-              <span style={{ fontSize: 10, background: `${C.blue}18`, color: C.blue, borderRadius: 6, padding: "2px 8px", fontWeight: 700 }}>{f.origin}</span>
-
-            </div>
+            <button style={{ background: C.green, color: "#fff", border: "none", borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 11, fontWeight: 600, flexShrink: 0 }}
+              onClick={() => { setFoodLog((l) => [...l, f]); setCalIn((c) => (c as number) + f.cal); }}>
+              + {T("log_food")}
+            </button>
           </div>
-          <button style={{ background: C.green, color: "#fff", border: "none", borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 11, fontWeight: 600, flexShrink: 0 }}
-            onClick={() => { setFoodLog((l) => [...l, f]); setCalIn((c) => (c as number) + f.cal); }}>
-            + {T("log_food")}
-          </button>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import type { Lang, Profile, Screen, Tab, Theme } from "@/types";
 import { TOKENS } from "@/lib/tokens";
 import { t } from "@/lib/i18n";
 import { lsGet, lsSet } from "@/hooks/useLocalStorage";
+import { supabase } from "@/lib/supabase";
 import { useProfile } from "@/hooks/useProfile";
 import { useTracker } from "@/hooks/useTracker";
 import { useMotionSensor } from "@/hooks/useMotionSensor";
@@ -84,7 +85,55 @@ export default function AppShell() {
     }
   }, [setProfile]);
 
+  useEffect(() => {
+    if (!supabase) return;
+
+    // Check current active session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const fullName =
+          session.user.user_metadata?.full_name ||
+          session.user.user_metadata?.name ||
+          session.user.email?.split("@")[0] ||
+          "";
+        setProfile((p) => ({
+          ...p,
+          fullName: p.fullName || fullName,
+          email: session.user.email || p.email,
+        }));
+        lsSet("tn_session", { loggedIn: true });
+        setScreen("app");
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const fullName =
+          session.user.user_metadata?.full_name ||
+          session.user.user_metadata?.name ||
+          session.user.email?.split("@")[0] ||
+          "";
+        setProfile((p) => ({
+          ...p,
+          fullName: p.fullName || fullName,
+          email: session.user.email || p.email,
+        }));
+        lsSet("tn_session", { loggedIn: true });
+        setScreen("app");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [setProfile]);
+
   const handleSignOut = useCallback(() => {
+    if (supabase) {
+      supabase.auth.signOut().catch(() => {});
+    }
     lsSet("tn_session", { loggedIn: false });
     setScreen("login");
     setTab("onboarding");
@@ -110,10 +159,9 @@ export default function AppShell() {
     background: C.bg,
     color: C.text,
     fontFamily: "'DM Sans', system-ui, sans-serif",
-    maxWidth: 480,
+    width: "100%",
     margin: "0 auto",
     position: "relative",
-    overflowX: "hidden",
   };
 
   // ── Auth screens ───────────────────────────────────────────────────────────
@@ -140,7 +188,7 @@ export default function AppShell() {
     return (
       <>
         <style>{globalStyle}</style>
-        <div style={appStyle}>
+        <div className="app-shell-container" style={appStyle}>
           <EditProfileModal
             profile={profile}
             setPF={setPF}
@@ -161,22 +209,23 @@ export default function AppShell() {
 
   const contentStyle: React.CSSProperties = isCoach
     ? {
-        position: "fixed",
-        top: 0, bottom: NAV_HEIGHT,
-        left: "50%", transform: "translateX(-50%)",
-        width: "100%", maxWidth: 480,
         display: "flex", flexDirection: "column",
         overflow: "hidden", background: C.bg,
       }
-    : { paddingBottom: isOnboarding ? 24 : NAV_HEIGHT + 16 };
+    : {
+        paddingBottom: isOnboarding ? 24 : NAV_HEIGHT + 24,
+        width: "100%",
+        boxSizing: "border-box",
+      };
 
   return (
     <>
       <style>{globalStyle}</style>
-      <div style={appStyle}>
+      <div className="app-shell-container" style={appStyle}>
         {isCoach ? (
-          <div style={contentStyle}>
+          <div className="coach-desktop-container" style={contentStyle}>
             <Header C={C} lang={lang} theme={theme}
+              tab={tab} setTab={setTab}
               onToggleLang={toggleLang} onToggleTheme={toggleTheme}
               onEditProfile={() => setEditingProfile(true)} />
             <CoachScreen
@@ -193,6 +242,7 @@ export default function AppShell() {
         ) : (
           <div>
             <Header C={C} lang={lang} theme={theme}
+              tab={tab} setTab={setTab}
               onToggleLang={toggleLang} onToggleTheme={toggleTheme}
               onEditProfile={() => setEditingProfile(true)}
               hideProfileBtn={isOnboarding} />

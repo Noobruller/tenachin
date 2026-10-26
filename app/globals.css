@@ -86,3 +86,80 @@ select {
 .page-enter {
   animation: fadeIn 0.25s ease forwards;
 }
+
+/* ─── Responsive Desktop Layout Utilities ───────────────────────────────── */
+.desktop-nav {
+  display: none !important;
+}
+
+.app-shell-container {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  max-width: 480px;
+}
+
+.coach-desktop-container {
+  position: fixed;
+  top: 0;
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+}
+
+@media (min-width: 768px) {
+  .app-shell-container {
+    max-width: 1240px !important;
+    padding: 0 16px 32px !important;
+  }
+  .desktop-nav {
+    display: flex !important;
+  }
+  .mobile-only {
+    display: none !important;
+  }
+  .coach-desktop-container {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    max-width: 980px !important;
+    height: calc(100vh - 85px) !important;
+    margin: 0 auto !important;
+    border-left: 1px solid rgba(128, 128, 128, 0.15);
+    border-right: 1px solid rgba(128, 128, 128, 0.15);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  .desktop-grid-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+    align-items: start !important;
+  }
+  .desktop-grid-cards {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 16px !important;
+  }
+  .desktop-stats-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+  }
+  .desktop-stats-card {
+    padding: 16px 14px !important;
+  }
+  .desktop-modal-card {
+    max-width: 540px !important;
+    margin: 40px auto !important;
+    border-radius: 24px !important;
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+  }
+}
+
+

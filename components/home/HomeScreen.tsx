@@ -76,61 +76,80 @@ export default function HomeScreen({
       </div>
 
       {/* Quick stats grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 16 }}>
+      <div className="desktop-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 20 }}>
         {[
           { i: "Steps", v: steps >= 1000 ? `${(steps / 1000).toFixed(1)}k` : String(steps), l: T("steps_label"), c: C.green },
           { i: "Water", v: `${water.toFixed(1)}L`, l: T("water_label"), c: C.blue },
           { i: "Cal", v: String(netCal), l: T("cal_label"), c: C.gold },
           { i: "Sleep", v: sleepLog.logged ? `${sleepLog.hours.toFixed(1)}h` : "—", l: T("sleep_label"), c: C.indigo },
         ].map((q) => (
-          <div key={q.l} style={{ background: C.surfaceEl, border: `1px solid ${C.border}`, borderRadius: 16, padding: "12px 8px", textAlign: "center" }}>
-            <div style={{ fontSize: 12, marginBottom: 4, fontWeight: 700, color: q.c }}>{q.i}</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: q.c, letterSpacing: "-0.02em", lineHeight: 1 }}>{q.v}</div>
-            <div style={{ fontSize: 9, color: C.textMuted, marginTop: 3, fontWeight: 600, letterSpacing: "0.04em" }}>{q.l}</div>
+          <div key={q.l} className="desktop-stats-card" style={{ background: C.surfaceEl, border: `1px solid ${C.border}`, borderRadius: 16, padding: "14px 10px", textAlign: "center" }}>
+            <div style={{ fontSize: 13, marginBottom: 4, fontWeight: 700, color: q.c }}>{q.i}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: q.c, letterSpacing: "-0.02em", lineHeight: 1 }}>{q.v}</div>
+            <div style={{ fontSize: 10, color: C.textMuted, marginTop: 4, fontWeight: 600, letterSpacing: "0.04em" }}>{q.l}</div>
           </div>
         ))}
       </div>
 
-      {/* BMI card */}
-      {bmi && bmiNum && (
-        <div style={{ ...card, background: `linear-gradient(135deg,${C.surface},${C.surfaceEl})`, marginBottom: 16 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-            <span style={{ fontWeight: 800, fontSize: 13 }}>{T("bmi_title")}</span>
-            <span style={{
-              fontSize: 11, background: `${bmiColor}22`, color: bmiColor,
-              borderRadius: 6, padding: "4px 12px", fontWeight: 700,
-            }}>{bmiCat}</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 10 }}>
-            <span style={{ fontSize: 36, fontWeight: 900, color: bmiColor, letterSpacing: "-0.04em", lineHeight: 1 }}>{bmi}</span>
-            <span style={{ fontSize: 12, color: C.textMuted, fontWeight: 600 }}>kg/m²</span>
-          </div>
-          <div style={{ height: 8, borderRadius: 4, background: C.border, overflow: "hidden" }}>
-            <div style={{ height: "100%", width: "100%", background: "linear-gradient(90deg,#5B9CF6 0%,#2ECC71 40%,#F4B942 70%,#FF5C5C 100%)", borderRadius: 4, position: "relative" }}>
-              <div style={{
-                position: "absolute", top: -4,
-                left: `${Math.min(Math.max((bmiNum - 10) / 30 * 100, 0), 100)}%`,
-                width: 16, height: 16, background: C.surface,
-                border: `2.5px solid ${bmiColor}`, borderRadius: "50%",
-                transform: "translateX(-50%)", boxShadow: `0 2px 8px ${bmiColor}55`,
-              }} />
+      <div className="desktop-grid-2">
+        {/* Left Column: Health Metrics & BMI */}
+        <div>
+          {bmi && bmiNum && (
+            <div style={{ ...card, background: `linear-gradient(135deg,${C.surface},${C.surfaceEl})`, marginBottom: 16 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                <span style={{ fontWeight: 800, fontSize: 14 }}>{T("bmi_title")}</span>
+                <span style={{
+                  fontSize: 11, background: `${bmiColor}22`, color: bmiColor,
+                  borderRadius: 6, padding: "4px 12px", fontWeight: 700,
+                }}>{bmiCat}</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 12 }}>
+                <span style={{ fontSize: 40, fontWeight: 900, color: bmiColor, letterSpacing: "-0.04em", lineHeight: 1 }}>{bmi}</span>
+                <span style={{ fontSize: 13, color: C.textMuted, fontWeight: 600 }}>kg/m²</span>
+              </div>
+              <div style={{ height: 8, borderRadius: 4, background: C.border, overflow: "hidden", marginBottom: 8 }}>
+                <div style={{ height: "100%", width: "100%", background: "linear-gradient(90deg,#5B9CF6 0%,#2ECC71 40%,#F4B942 70%,#FF5C5C 100%)", borderRadius: 4, position: "relative" }}>
+                  <div style={{
+                    position: "absolute", top: -4,
+                    left: `${Math.min(Math.max((bmiNum - 10) / 30 * 100, 0), 100)}%`,
+                    width: 16, height: 16, background: C.surface,
+                    border: `2.5px solid ${bmiColor}`, borderRadius: "50%",
+                    transform: "translateX(-50%)", boxShadow: `0 2px 8px ${bmiColor}55`,
+                  }} />
+                </div>
+              </div>
+              <div style={{ fontSize: 11, color: C.textMuted, lineHeight: 1.4 }}>
+                {bmiCat === T("normal") ? "You are in the healthy BMI range. Keep maintaining your routine!" : "Balance nutrition and physical activity to reach your optimal target."}
+              </div>
+            </div>
+          )}
+
+          {/* Quick Info Card */}
+          <div style={{ ...card, background: `linear-gradient(145deg, ${C.surface}, ${C.surfaceEl})` }}>
+            <div style={{ fontWeight: 800, fontSize: 14, color: C.text, marginBottom: 8 }}>
+              {profile.fullName ? `Welcome back, ${profile.fullName}` : "Welcome to TENACHIN"}
+            </div>
+            <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.6 }}>
+              Track your daily wellness with localized Ethiopian nutrition, personalized workouts, and your 24/7 AI Health Coach.
             </div>
           </div>
         </div>
-      )}
 
-      {/* Daily tips */}
-      <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: C.textMuted, marginBottom: 10, marginTop: 4 }}>
-        {T("daily_tips")}
-      </div>
-      {TIPS.map((tip, i) => (
-        <div key={i} style={{ ...card, display: "flex", gap: 14, alignItems: "flex-start" }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.green, flexShrink: 0, lineHeight: 1, marginTop: 2 }}>{tip.i}</div>
-          <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.55 }}>
-            {lang === "am" ? tip.am : lang === "or" ? tip.or : tip.en}
+        {/* Right Column: Daily tips */}
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: C.textMuted, marginBottom: 10, marginTop: 4 }}>
+            {T("daily_tips")}
           </div>
+          {TIPS.map((tip, i) => (
+            <div key={i} style={{ ...card, display: "flex", gap: 14, alignItems: "flex-start", marginBottom: 10 }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: C.green, flexShrink: 0, lineHeight: 1, marginTop: 2 }}>{tip.i}</div>
+              <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.55 }}>
+                {lang === "am" ? tip.am : lang === "or" ? tip.or : tip.en}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }

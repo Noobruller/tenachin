@@ -74,6 +74,7 @@ export default function BottomNav({ tab, setTab, C, lang }: BottomNavProps) {
 
   return (
     <nav
+      className="mobile-only"
       style={{
         position: "fixed",
         bottom: 0,
