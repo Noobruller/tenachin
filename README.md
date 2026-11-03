@@ -57,9 +57,3 @@ tenachin/
 ├── package.json                  
 ├── README.md                     
 └── tsconfig.json                 
-
-
-- `npm run dev`: Starts Next.js development server at `http://localhost:3000`
-- `npm run build`: Type-checks and creates production build
-- `npm run start`: Runs production server
-- `npm run lint`: Runs ESLint checks
