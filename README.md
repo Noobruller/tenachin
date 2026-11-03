@@ -20,6 +20,8 @@ Rebuilt from a monolithic prototype into a modular, production-grade **Next.js 1
 
 --Architecture & Folder Structure
 
+Made by Natan yonas ---- CTC-710-26
+
 ```
 tenachin/
 ├── app/                          
