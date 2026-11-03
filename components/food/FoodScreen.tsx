@@ -111,7 +111,7 @@ export default function FoodScreen({
         {/* AI Meal Plan */}
         <div style={card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-            <span style={{ fontSize: 13, fontWeight: 800 }}>AI {T("ai_meal_plan")}</span>
+            <span style={{ fontSize: 13, fontWeight: 800 }}>{T("ai_meal_plan")}</span>
             <button style={{ background: C.green, color: "#fff", border: "none", borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 11, fontWeight: 600 }}
               onClick={getFoodRec} disabled={aiLoading}>
               {aiLoading ? "…" : T("generate")}
