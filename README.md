@@ -57,39 +57,7 @@ tenachin/
 ├── package.json                  
 ├── README.md                     
 └── tsconfig.json                 
-```
 
----
-
--- Getting Started
-
--- Prerequisites
-- Node.js 18.17+ or 20+
-- npm, yarn, or pnpm
-
--- Installation
-
-1. Clone repository and install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Configure environment variables (optional for AI Coach):
-   Create `.env.local` in root:
-   ```env
-   NEXT_PUBLIC_OR_KEY=your_openrouter_api_key_here
-   ```
-
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-##  Scripts
 
 - `npm run dev`: Starts Next.js development server at `http://localhost:3000`
 - `npm run build`: Type-checks and creates production build
